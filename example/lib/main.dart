@@ -20,11 +20,10 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    initPlatformState();
+    loadImage();
   }
 
-  // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async {
+  Future<void> loadImage() async {
     var imageData =
         await rootBundle.load("assets/images/landscape.jpg").then((byteData) {
       return byteData.buffer.asUint8List();

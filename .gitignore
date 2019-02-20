@@ -3,5 +3,14 @@
 
 .packages
 .pub/
+.idea
+example/ios/Podfile.lock
+example/ios/Runner.xcworkspace/xcshareddata/
+
 
 build/
+ios/Frameworks/
+ios/Podfile.lock
+ios/Runner.xcworkspace/xcshareddata/
+
+
