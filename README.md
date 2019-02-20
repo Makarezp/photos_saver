@@ -1,14 +1,95 @@
-# image_gallery_saver
+# Image Gallery Saver plugin for Flutter
 
-A new flutter plugin project.
 
-## Getting Started
+A Flutter plugin for iOS and Android for saving images to the image library.
 
-This project is a starting point for a Flutter
-[plug-in package](https://flutter.io/developing-packages/),
-a specialized package that includes platform-specific implementation code for
-Android and/or iOS.
+*Note*: This plugin is still under development, and some APIs might not be available yet. [Feedback welcome](https://github.com/flutter/flutter/issues) and [Pull Requests](https://github.com/flutter/plugins/pulls) are most welcome!
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.io/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+## Installation
+
+First, add `image_gallery_saver` as a [dependency in your pubspec.yaml file](https://flutter.io/platform-plugins/).
+
+### iOS
+
+Add the following keys to your _Info.plist_ file, located in `<project root>/ios/Runner/Info.plist`:
+
+* `NSPhotoLibraryUsageDescription` - describe why your app needs permission for the photo library. This is called _Privacy - Photo Library Usage Description_ in the visual editor.
+
+
+No configuration required - the plugin should work out of the box.
+
+### Example
+
+``` dart
+import 'dart:typed_data';
+import 'package:flutter/material.dart';
+import 'dart:async';
+import 'package:flutter/services.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  Uint8List _imageData;
+  var _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    super.initState();
+    initPlatformState();
+  }
+
+  // Platform messages are asynchronous, so we initialize in an async method.
+  Future<void> initPlatformState() async {
+    var imageData =
+        await rootBundle.load("assets/images/landscape.jpg").then((byteData) {
+      return byteData.buffer.asUint8List();
+    });
+
+    if (!mounted) return;
+
+    setState(() {
+      _imageData = imageData;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        key: _scaffoldKey,
+        appBar: AppBar(
+          title: const Text('Plugin example app'),
+        ),
+        body: Center(
+          child: Column(
+            children: <Widget>[
+              _imageData != null
+                  ? Image.memory(_imageData,
+                      fit: BoxFit.cover, width: double.infinity)
+                  : Text("Loading"),
+              SizedBox(height: 16),
+              RaisedButton(
+                onPressed: () async {
+                  String filePath =
+                      await ImageGallerySaver.saveFile(fileData: _imageData);
+                  _scaffoldKey.currentState.showSnackBar(SnackBar(
+                      duration: Duration(seconds: 5),
+                      content: Text("Created image file at $filePath")));
+                },
+                child: Text("Add this image to gallery"),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+```

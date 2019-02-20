@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -12,7 +14,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
+  Uint8List _imageData;
+  var _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -22,21 +25,15 @@ class _MyAppState extends State<MyApp> {
 
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
-    String platformVersion;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      platformVersion = await ImageGallerySaver.platformVersion;
-    } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
-    }
+    var imageData =
+        await rootBundle.load("assets/images/landscape.jpg").then((byteData) {
+      return byteData.buffer.asUint8List();
+    });
 
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
     if (!mounted) return;
 
     setState(() {
-      _platformVersion = platformVersion;
+      _imageData = imageData;
     });
   }
 
@@ -44,11 +41,30 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
+        key: _scaffoldKey,
         appBar: AppBar(
           title: const Text('Plugin example app'),
         ),
         body: Center(
-          child: Text('Running on: $_platformVersion\n'),
+          child: Column(
+            children: <Widget>[
+              _imageData != null
+                  ? Image.memory(_imageData,
+                      fit: BoxFit.cover, width: double.infinity)
+                  : Text("Loading"),
+              SizedBox(height: 16),
+              RaisedButton(
+                onPressed: () async {
+                  String filePath =
+                      await ImageGallerySaver.saveFile(fileData: _imageData);
+                  _scaffoldKey.currentState.showSnackBar(SnackBar(
+                      duration: Duration(seconds: 5),
+                      content: Text("Created image file at $filePath")));
+                },
+                child: Text("Add this image to gallery"),
+              )
+            ],
+          ),
         ),
       ),
     );
