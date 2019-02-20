@@ -3,7 +3,7 @@
 
 A Flutter plugin for iOS and Android for saving images to the image library.
 
-*Note*: This plugin is still under development, and some APIs might not be available yet. [Feedback welcome](https://github.com/flutter/flutter/issues) and [Pull Requests](https://github.com/flutter/plugins/pulls) are most welcome!
+*Note*: This plugin is still under development, and some APIs might not be available yet. [Feedback welcome](https://github.com/Makarezp/image_gallery_saver/issues) and [Pull Requests](https://github.com/Makarezp/image_gallery_saver/pulls) are most welcome!
 
 ## Installation
 
@@ -22,8 +22,10 @@ No configuration required - the plugin should work out of the box.
 
 ``` dart
 import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'dart:async';
+
 import 'package:flutter/services.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 
@@ -41,11 +43,10 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    initPlatformState();
+    loadImage();
   }
 
-  // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async {
+  Future<void> loadImage() async {
     var imageData =
         await rootBundle.load("assets/images/landscape.jpg").then((byteData) {
       return byteData.buffer.asUint8List();
@@ -91,5 +92,4 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
-
 ```
