@@ -1,5 +1,5 @@
 name: image_gallery_saver
-description: A new flutter plugin project.
+description: Flutter plugin for saving images in the image library.
 version: 0.0.1
 author:
 homepage:

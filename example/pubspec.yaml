@@ -1,6 +1,7 @@
 name: image_gallery_saver_example
-description: Demonstrates how to use the image_gallery_saver plugin.
+description: Plugin for saving images to device image library gallery for android and phto li.
 publish_to: 'none'
+version: 0.1.0
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
