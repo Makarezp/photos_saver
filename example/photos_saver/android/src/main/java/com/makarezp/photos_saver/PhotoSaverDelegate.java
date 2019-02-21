@@ -21,7 +21,7 @@ public class PhotoSaverDelegate
         implements
         PluginRegistry.RequestPermissionsResultListener {
 
-    static final int REQUEST_EXTERNAL_IMAGE_STORAGE_PERMISSION = 2344;
+    static final int REQUEST_EXTERNAL_IMAGE_STORAGE_PERMISSION = 4999;
 
     private final Activity activity;
     private final PermissionManager permissionManager;

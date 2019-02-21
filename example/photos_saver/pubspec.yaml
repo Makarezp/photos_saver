@@ -1,6 +1,6 @@
 name: photos_saver
 description: Flutter plugin for saving images in the image library.
-version: 0.0.1
+version: 0.0.2
 author: makarezp <makarezp@gmail.com>
 homepage: https://github.com/Makarezp/photos_saver
 
